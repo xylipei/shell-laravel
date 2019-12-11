@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Topic;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TopicRequest;
+use Auth;
 
 class TopicsController extends Controller
 {
@@ -27,23 +29,43 @@ class TopicsController extends Controller
         return view('topics.show', compact('topic'));
     }
 
-	public function create(Topic $topic)
-	{
-		return view('topics.create_and_edit', compact('topic'));
-	}
+    public function create(Topic $topic)
+    {
+        $categories = Category::all();
+        return view('topics.create_and_edit', compact('topic', 'categories'));
+    }
 
-	public function store(TopicRequest $request)
-	{
-		$topic = Topic::create($request->all());
-		return redirect()->route('topics.show', $topic->id)->with('message', 'Created successfully.');
-	}
+    /**
+     * @param TopicRequest $request
+     * @param Topic $topic
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(TopicRequest $request, Topic $topic)
+    {
+        $topic->fill($request->all());
+        $topic->user_id = Auth::id();
+        $topic->save();
 
+        return redirect()->route('topics.show', $topic->id)->with('success', '帖子创建成功！');
+    }
+
+    /**
+     * @param Topic $topic
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
 	public function edit(Topic $topic)
 	{
         $this->authorize('update', $topic);
 		return view('topics.create_and_edit', compact('topic'));
 	}
 
+    /**
+     * @param TopicRequest $request
+     * @param Topic $topic
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
 	public function update(TopicRequest $request, Topic $topic)
 	{
 		$this->authorize('update', $topic);
@@ -52,6 +74,11 @@ class TopicsController extends Controller
 		return redirect()->route('topics.show', $topic->id)->with('message', 'Updated successfully.');
 	}
 
+    /**
+     * @param Topic $topic
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
 	public function destroy(Topic $topic)
 	{
 		$this->authorize('destroy', $topic);
