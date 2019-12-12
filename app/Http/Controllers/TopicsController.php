@@ -54,11 +54,12 @@ class TopicsController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-	public function edit(Topic $topic)
-	{
+    public function edit(Topic $topic)
+    {
         $this->authorize('update', $topic);
-		return view('topics.create_and_edit', compact('topic'));
-	}
+        $categories = Category::all();
+        return view('topics.create_and_edit', compact('topic', 'categories'));
+    }
 
     /**
      * @param TopicRequest $request
