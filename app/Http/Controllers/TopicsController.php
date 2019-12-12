@@ -80,13 +80,13 @@ class TopicsController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-	public function destroy(Topic $topic)
-	{
-		$this->authorize('destroy', $topic);
-		$topic->delete();
+    public function destroy(Topic $topic)
+    {
+        $this->authorize('destroy', $topic);
+        $topic->delete();
 
-		return redirect()->route('topics.index')->with('message', 'Deleted successfully.');
-	}
+        return redirect()->route('topics.index')->with('success', '成功删除！');
+    }
 
     public function uploadImage(Request $request, ImageUploadHandler $uploader)
     {
