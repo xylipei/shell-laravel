@@ -177,6 +177,7 @@ return [
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Frozennode\Administrator\AdministratorServiceProvider::class,
 
     ],
 
