@@ -24,6 +24,7 @@ class ReplyObserver
 
     public function deleted(Reply $reply)
     {
-        $reply->topic->updateReplyCount();
+        $reply->topic->reply_count = $reply->topic->replies->count();
+        $reply->topic->save();
     }
 }
