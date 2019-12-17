@@ -83,7 +83,7 @@ return array(
      * @type closure
      */
     'permission' => function () {
-        // 只要是能管理内容的用户，就允许访问后台
+        // 只要是能管理内容的用户，就允许访问后台c
         return Auth::check() && Auth::user()->can('manage_contents');
     },
 
